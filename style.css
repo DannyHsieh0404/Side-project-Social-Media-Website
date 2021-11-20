@@ -1,0 +1,103 @@
+body,
+html {
+  box-sizing: border-box;
+}
+
+/* Introduction part */
+#introduction {
+  display: flex;
+  height: 600px;
+  width: 100%;
+}
+
+.slogan-description {
+  position: relative;
+  width: 50%;
+}
+.slogan {
+  position: absolute;
+  top: 200px;
+  left: 15px;
+  font-size: 90px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.description {
+  position: absolute;
+  top: 320px;
+  left: 20px;
+  font-size: 23px;
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+.introduction-image {
+  position: relative;
+  height: 100%;
+}
+
+/* Feature part */
+#features {
+  display: flex;
+  height: 700px;
+  padding: 25px;
+  border-radius: 15px;
+  background: #cdcdcd;
+}
+
+.feature-logo {
+  flex-basis: 35%;
+  font-size: 30px;
+  font-weight: 200;
+}
+#feature-contents {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 40px;
+}
+.feature {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.feature-name {
+  margin: 0 0 10px 0;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+/* Search part */
+#search-form-container {
+  position: relative;
+  z-index: -100;
+  bottom: 30px;
+  padding: 90px;
+  border-radius: 15px;
+  background-color: mediumpurple;
+}
+#search-form {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 10px;
+}
+#search-input {
+  width: 60vw;
+}
+
+/* User panel */
+#data-container {
+  padding: 25px;
+}
+#paginators {
+  padding: 0 0 20px 0;
+  /* border: 5px solid red; */
+}
+
+/* Footer */
+#footer {
+  height: 200px;
+  border-radius: 15px 15px 0 0;
+  padding: 15px;
+  background-color: #cdcdcd;
+}
