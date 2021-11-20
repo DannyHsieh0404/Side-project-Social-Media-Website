@@ -67,9 +67,7 @@ html {
 
 /* Search part */
 #search-form-container {
-  position: relative;
   z-index: -100;
-  bottom: 30px;
   padding: 90px;
   border-radius: 15px;
   background-color: mediumpurple;
