@@ -73,8 +73,8 @@ function loadUserData(users) {
   users.forEach(function (user) {
     rawHTML += `
     <div class="col-3">
-		<div class="card m-4" style="width: 13rem;">
-		<button type="button" class="btn btn-dark show-user-info" data-bs-toggle="modal" data-bs-target="#user-modal" data-id="${user.id}">
+		<div class="card m-4" style="width: 17rem;">
+		<button type="button" class="btn btn-light show-user-info" data-bs-toggle="modal" data-bs-target="#user-modal" data-id="${user.id}">
     <img src=${user.avatar} alt="" data-id=${user.id}>
 		</button>
 		<div class="card-body">
@@ -99,7 +99,7 @@ function showUserModal(id) {
 
     modalTitle.innerText = `${data.surname}  ${data.name}`
     modalDescription.innerHTML = `Age: ${data.age}</br>Gender: ${data.gender}</br>Birthday: ${data.birthday}</br>Region: ${data.region}</br>Email: ${data.email}`
-    modalImage.innerHTML = `<img src=${data.avatar} alt="user-avatar" class="img-fluid" style="width: 50%">`
+    modalImage.innerHTML = `<img src=${data.avatar} alt="user-avatar" class="img-fluid" style="width: 75%">`
     modalButton.dataset.id = id
   }).catch(error => console.log(error))
 }
