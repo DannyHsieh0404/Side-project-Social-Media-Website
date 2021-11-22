@@ -7,8 +7,10 @@ const searchForm = document.querySelector('#search-form')
 const searchInput = document.querySelector('#search-input')
 const modal = document.querySelector('#user-modal')
 const paginators = document.querySelector('.pagination')
+const genderContainer = document.querySelector('#gender-button-container')
+const dropDown = document.querySelector('.dropdown-menu')
 
-const users = []
+let users = []
 let filteredUsers = []
 let closeFirends = []
 
@@ -48,6 +50,28 @@ paginators.addEventListener('click', function onPaginatorClicked(event) {
 })
 
 
+// Change the gender
+genderContainer.addEventListener('click', function onGenderButtonClicked(event) {
+  const target = event.target
+  if (target.id === 'gender-button-male') {
+    changeGender('male')
+  } else if (target.id === 'gender-button-female') {
+    changeGender('female')
+  }
+})
+
+// Change the gender from navbar
+dropDown.addEventListener('click', function onGenderButtonClicked(event) {
+  const target = event.target
+  if (target.classList.contains('male')) {
+    changeGender('male')
+  } else if (target.classList.contains('female')) {
+    changeGender('female')
+  } else {
+    generateUsers()
+  }
+})
+
 
 ////////////////////////////// Functions //////////////////////////////
 function generateUsers() {
@@ -56,9 +80,24 @@ function generateUsers() {
     .get(BASE_URL + `?results=${NUM_OF_USERS}`)
     .then(function (response) {
       // 1. Store the data
+      users = []
       users.push(...response.data.results)
 
       // 2. Render the panel
+      loadUserData(getUsersByPage(1))
+      renderPaginators(users.length)
+    })
+    .catch((error) => console.log(error));
+}
+
+//////////////////////////////
+function changeGender(gender) {
+  axios
+    .get(BASE_URL + `?gender=${gender}&results=${NUM_OF_USERS}`)
+    .then(function (response) {
+      users = []
+      users.push(...response.data.results)
+
       loadUserData(getUsersByPage(1))
       renderPaginators(users.length)
     })

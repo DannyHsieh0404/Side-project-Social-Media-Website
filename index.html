@@ -19,13 +19,28 @@
       <div id="navbar-logo"><img src="https://i.ibb.co/M9D6rNY/5e6818430cbe3a0557a074adf7a3f3a6-removebg-preview.png"
           alt="logo" style="height: 100%; margin-right: 3px;">Meta Love
       </div>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-link active" aria-current="page"
-            href="C:\Danny Hsieh\School Life\Alpha Camp\Semester 2-2\Side project Social Media Website\index.html">Home</a>
-          <a class="nav-link active"
-            href="C:\Danny Hsieh\School Life\Alpha Camp\Semester 2-2\Side project Social Media Website\favorite.html">Favorites</a>
-        </div>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page"
+              href="C:\Danny Hsieh\School Life\Alpha Camp\Semester 2-2\Side project Social Media Website\index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active"
+              href="C:\Danny Hsieh\School Life\Alpha Camp\Semester 2-2\Side project Social Media Website\favorite.html">Favorites</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Gender
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item male" href="#">Male</a></li>
+              <li><a class="dropdown-item female" href="#">Female</a></li>
+              <li><a class="dropdown-item" href="#">Non-specified</a></li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
@@ -105,8 +120,10 @@
 
   <!-- Gender button part -->
   <div class="container" id="gender-button-container">
-    <button type="button" class="gender-button"><i class="fas fa-mars" id="gender-button-icon"></i>Male</button>
-    <button type="button" class="gender-button"><i class="fas fa-venus" id="gender-button-icon"></i>Female</button>
+    <button type="button" class="gender-button" id="gender-button-male"><i class="fas fa-mars"
+        id="gender-button-icon"></i>Male</button>
+    <button type="button" class="gender-button" id="gender-button-female"><i class="fas fa-venus"
+        id="gender-button-icon"></i>Female</button>
   </div>
 
 
