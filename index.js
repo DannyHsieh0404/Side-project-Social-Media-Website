@@ -57,6 +57,8 @@ genderContainer.addEventListener('click', function onGenderButtonClicked(event) 
     changeGender('male')
   } else if (target.id === 'gender-button-female') {
     changeGender('female')
+  } else {
+    generateUsers()
   }
 })
 
