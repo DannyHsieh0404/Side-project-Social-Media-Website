@@ -1,7 +1,7 @@
 const BASE_URL = "https://lighthouse-user-api.herokuapp.com"
 const INDEX_URL = BASE_URL + "/api/v1/users"
 const USER_URL = INDEX_URL + '/'
-const container = document.querySelector('.container')
+const dataContainer = document.querySelector('#data-container')
 const userPanel = document.querySelector('#user-panel')
 const searchForm = document.querySelector('#search-form')
 const searchInput = document.querySelector('#search-input')
@@ -14,9 +14,8 @@ let filteredUsers = [] // For searching close friends with keywords
 ////////////////////////////// Execution //////////////////////////////
 generateUsers();
 
-container.addEventListener('click', function onUserClicked(event) {
+dataContainer.addEventListener('click', function onUserClicked(event) {
   const target = event.target
-  console.log(target)
   showUserModal(event.target.dataset.id)
 })
 

@@ -1,7 +1,6 @@
 const BASE_URL = "https://lighthouse-user-api.herokuapp.com"
 const INDEX_URL = BASE_URL + "/api/v1/users"
 const USER_URL = INDEX_URL + '/'
-const container = document.querySelector('.container')
 const introduction = document.querySelector('#introduction')
 const features = document.querySelector('#features')
 const dataContainer = document.querySelector('#data-container')
