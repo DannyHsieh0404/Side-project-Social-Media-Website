@@ -14,8 +14,9 @@ let filteredUsers = [] // For searching close friends with keywords
 ////////////////////////////// Execution //////////////////////////////
 generateUsers();
 
-container.addEventListener('click', function (event) {
+container.addEventListener('click', function onUserClicked(event) {
   const target = event.target
+  console.log(target)
   showUserModal(event.target.dataset.id)
 })
 
@@ -51,13 +52,13 @@ function loadUserData(users) {
 
   users.forEach(function (user) {
     rawHTML += `
-    <div class="col-sm-2">
-		<div class="card m-3" style="width: 11rem;">
-		<button type="button" class="btn btn-light show-user-info" data-bs-toggle="modal" data-bs-target="#user-modal" data-id=${user.id}>
+    <div class="col-3">
+		<div class="card m-4" style="width: 17rem;">
+		<button type="button" class="btn btn-light show-user-info" data-bs-toggle="modal" data-bs-target="#user-modal" data-id="${user.id}">
     <img src=${user.avatar} alt="" data-id=${user.id}>
 		</button>
 		<div class="card-body">
-			<h5>${user.surname} ${user.name}</h5>
+			<h5>${user.name} ${user.surname}</h5>
 		</div>
 	</div>
   </div>`;
