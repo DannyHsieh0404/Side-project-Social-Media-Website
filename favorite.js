@@ -1,6 +1,4 @@
-const BASE_URL = "https://lighthouse-user-api.herokuapp.com"
-const INDEX_URL = BASE_URL + "/api/v1/users"
-const USER_URL = INDEX_URL + '/'
+const BASE_URL = "https://randomuser.me/api/"
 const dataContainer = document.querySelector('#data-container')
 const userPanel = document.querySelector('#user-panel')
 const searchForm = document.querySelector('#search-form')
@@ -50,14 +48,15 @@ function loadUserData(users) {
   let rawHTML = "";
 
   users.forEach(function (user) {
+
     rawHTML += `
     <div class="col-3">
 		<div class="card m-4" style="width: 17rem;">
-		<button type="button" class="btn btn-light show-user-info" data-bs-toggle="modal" data-bs-target="#user-modal" data-id="${user.id}">
-    <img src=${user.avatar} alt="" data-id=${user.id}>
+		<button type="button" class="btn btn-light show-user-info" data-bs-toggle="modal" data-bs-target="#user-modal" data-sha1="${user.login.sha1}">
+    <img src=${user.picture.large} alt="" data-sha1="${user.login.sha1}">
 		</button>
 		<div class="card-body">
-			<h5>${user.name} ${user.surname}</h5>
+			<h5>${user.name.first} ${user.name.last}</h5>
 		</div>
 	</div>
   </div>`;
@@ -67,21 +66,22 @@ function loadUserData(users) {
 
 ////////////////////////////// This function is called when event is triggered
 
-function showUserModal(id) {
+function showUserModal(sha1) {
   const modalTitle = document.querySelector('#user-modal-title')
   const modalImage = document.querySelector('#user-modal-image')
   const modalDescription = document.querySelector('#user-modal-description')
-  const modalButton = document.querySelector('.btn-remove-close-friends')
+  const modalButton = document.querySelector('.btn-add-to-close-friends')
 
-  axios.get(USER_URL + id).then((response) => {
-    const data = response.data
+  const data = users.find(function (user) {
+    return user.login.sha1 === sha1
+  })
 
-    modalTitle.innerText = `${data.surname}  ${data.name}`
-    modalDescription.innerHTML = `Age: ${data.age}</br>Gender: ${data.gender}</br>Birthday: ${data.birthday}</br>Region: ${data.region}</br>Email: ${data.email}`
-    modalImage.innerHTML = `<img src=${data.avatar} alt="user-avatar" class="img-fluid" style="width: 50%">`
-    modalButton.dataset.id = id
-  }).catch(error => console.log(error))
+  modalTitle.innerText = `${data.name.first}  ${data.name.last}`
+  modalDescription.innerHTML = `Age: ${data.dob.age}</br>Gender: ${data.gender}</br>Birthday: ${data.dob.date}</br>Region: ${data.location.city}, ${data.location.countrys}</br>Email: ${data.email}`
+  modalImage.innerHTML = `<img src=${data.picture.large} alt="user-avatar" class="img-fluid" style="width: 75%">`
+  modalButton.dataset.id = id
 }
+
 
 ////////////////////////////////////////////////////////////
 

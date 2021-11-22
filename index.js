@@ -1,6 +1,4 @@
-const BASE_URL = "https://lighthouse-user-api.herokuapp.com"
-const INDEX_URL = BASE_URL + "/api/v1/users"
-const USER_URL = INDEX_URL + '/'
+const BASE_URL = "https://randomuser.me/api/"
 const introduction = document.querySelector('#introduction')
 const features = document.querySelector('#features')
 const dataContainer = document.querySelector('#data-container')
@@ -15,13 +13,15 @@ let filteredUsers = []
 let closeFirends = []
 
 USERS_PER_PAGE = 16
+NUM_OF_USERS = 120
+
 
 ////////////////////////////// Execution //////////////////////////////
 generateUsers();
 
 dataContainer.addEventListener('click', function onCardClicked(event) {
   const target = event.target
-  showUserModal(event.target.dataset.id)
+  showUserModal(event.target.dataset.sha1)
 })
 
 // Searching users with keywords
@@ -34,10 +34,10 @@ searchForm.addEventListener('click', function onFormSubmitted(event) {
 
 // Add to close friends
 modal.addEventListener('click', function onButtonClicked(event) {
-  const id = Number(event.target.dataset.id)
+  const sha1 = event.target.dataset.sha1
 
   if (event.target.classList.contains('btn-add-to-close-friends')) {
-    addToClose(id)
+    addToClose(sha1)
   }
 })
 
@@ -48,11 +48,12 @@ paginators.addEventListener('click', function onPaginatorClicked(event) {
 })
 
 
+
 ////////////////////////////// Functions //////////////////////////////
 function generateUsers() {
   // get the data of users
   axios
-    .get(INDEX_URL)
+    .get(BASE_URL + `?results=${NUM_OF_USERS}`)
     .then(function (response) {
       // 1. Store the data
       users.push(...response.data.results)
@@ -73,11 +74,11 @@ function loadUserData(users) {
     rawHTML += `
     <div class="col-3">
 		<div class="card m-4" style="width: 17rem;">
-		<button type="button" class="btn btn-light show-user-info" data-bs-toggle="modal" data-bs-target="#user-modal" data-id="${user.id}">
-    <img src=${user.avatar} alt="" data-id=${user.id}>
+		<button type="button" class="btn btn-light show-user-info" data-bs-toggle="modal" data-bs-target="#user-modal" data-sha1="${user.login.sha1}">
+    <img src=${user.picture.large} alt="" data-sha1="${user.login.sha1}">
 		</button>
 		<div class="card-body">
-			<h5>${user.name} ${user.surname}</h5>
+			<h5>${user.name.first} ${user.name.last}</h5>
 		</div>
 	</div>
   </div>`;
@@ -87,20 +88,20 @@ function loadUserData(users) {
 
 ////////////////////////////// This function is called when event is triggered
 
-function showUserModal(id) {
+function showUserModal(sha1) {
   const modalTitle = document.querySelector('#user-modal-title')
   const modalImage = document.querySelector('#user-modal-image')
   const modalDescription = document.querySelector('#user-modal-description')
   const modalButton = document.querySelector('.btn-add-to-close-friends')
 
-  axios.get(USER_URL + id).then((response) => {
-    const data = response.data
+  const data = users.find(function (user) {
+    return user.login.sha1 === sha1
+  })
 
-    modalTitle.innerText = `${data.surname}  ${data.name}`
-    modalDescription.innerHTML = `Age: ${data.age}</br>Gender: ${data.gender}</br>Birthday: ${data.birthday}</br>Region: ${data.region}</br>Email: ${data.email}`
-    modalImage.innerHTML = `<img src=${data.avatar} alt="user-avatar" class="img-fluid" style="width: 75%">`
-    modalButton.dataset.id = id
-  }).catch(error => console.log(error))
+  modalTitle.innerText = `${data.name.first}  ${data.name.last}`
+  modalDescription.innerHTML = `Age: ${data.dob.age}</br>Gender: ${data.gender}</br>Birthday: ${data.dob.date}</br>Region: ${data.location.city}, ${data.location.countrys}</br>Email: ${data.email}`
+  modalImage.innerHTML = `<img src=${data.picture.large} alt="user-avatar" class="img-fluid" style="width: 75%">`
+  modalButton.dataset.sha1 = sha1
 }
 
 ////////////////////////////////////////////////////////////
@@ -124,15 +125,17 @@ function findUsers(event) {
 
 ////////////////////////////////////////////////////////////
 
-function addToClose(id) {
+function addToClose(sha1) {
   // 1. Get the closeFriends list from the local storage
   closeFirends = JSON.parse(localStorage.getItem('closeFriends')) || []
 
   // 2. Get the corresponding user
-  const newCloseFriend = users.find(user => user.id === id)
+  const newCloseFriend = users.find(function (user) {
+    return user.login.sha1 === sha1
+  })
 
   // 3. Check if the user is in the closeFriends list
-  if (closeFirends.some(user => user.id === id)) {
+  if (closeFirends.some(user => user.login.sha1 === sha1)) {
     return alert("名單中已有此用戶!")
   }
 
