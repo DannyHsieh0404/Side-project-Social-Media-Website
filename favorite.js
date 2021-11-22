@@ -14,7 +14,7 @@ generateUsers();
 
 dataContainer.addEventListener('click', function onUserClicked(event) {
   const target = event.target
-  showUserModal(event.target.dataset.id)
+  showUserModal(event.target.dataset.sha1)
 })
 
 // Searching users with keywords
@@ -27,8 +27,8 @@ searchForm.addEventListener('click', function onFormSubmitted(event) {
 // Remove close friends
 modal.addEventListener('click', function onButtonClicked(event) {
   if (event.target.classList.contains('btn-remove-close-friends')) {
-    const id = Number(event.target.dataset.id)
-    removeCloseFriend(id)
+    const sha1 = event.target.dataset.sha1
+    removeCloseFriend(sha1)
     loadUserData(users)
   }
 })
@@ -70,7 +70,7 @@ function showUserModal(sha1) {
   const modalTitle = document.querySelector('#user-modal-title')
   const modalImage = document.querySelector('#user-modal-image')
   const modalDescription = document.querySelector('#user-modal-description')
-  const modalButton = document.querySelector('.btn-add-to-close-friends')
+  const modalButton = document.querySelector('.btn-remove-close-friends')
 
   const data = users.find(function (user) {
     return user.login.sha1 === sha1
@@ -79,7 +79,7 @@ function showUserModal(sha1) {
   modalTitle.innerText = `${data.name.first}  ${data.name.last}`
   modalDescription.innerHTML = `Age: ${data.dob.age}</br>Gender: ${data.gender}</br>Birthday: ${data.dob.date}</br>Region: ${data.location.city}, ${data.location.countrys}</br>Email: ${data.email}`
   modalImage.innerHTML = `<img src=${data.picture.large} alt="user-avatar" class="img-fluid" style="width: 75%">`
-  modalButton.dataset.id = id
+  modalButton.dataset.sha1 = sha1
 }
 
 
@@ -104,12 +104,12 @@ function findUsers(users, event) {
 
 ////////////////////////////////////////////////////////////
 
-function removeCloseFriend(id) {
+function removeCloseFriend(sha1) {
   // 1. Get the closeFriends list (if any)
   if (!users.length || !users) { return alert('您已無 close friends...') }
 
   // 2. Find the corresponding user ID
-  const removedIndex = users.findIndex(user => user.id === id)
+  const removedIndex = users.findIndex(user => user.login.sha1 === sha1)
 
   // 3. Remove the user
   users.splice(removedIndex, 1)
