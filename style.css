@@ -182,7 +182,7 @@ html {
 }
 #footer-contents {
   font-size: 25px;
-  font-weight: 300;
+  font-weight: 400;
 }
 #footer-logo {
   display: flex;
@@ -192,4 +192,13 @@ html {
   font-size: 27px;
   font-family:'Arial Narrow', Arial, sans-serif;
   letter-spacing: 1px;
+}
+.footer-contents-list {
+  padding-top: 7px;
+  font-size: 17px;
+  font-weight: 300;
+}
+.footer-contents-list ul{
+  list-style-type: none;
+  padding: 0; /* remove indentation */
 }
