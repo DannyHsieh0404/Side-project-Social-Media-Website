@@ -8,7 +8,7 @@ const searchInput = document.querySelector('#search-input')
 const modal = document.querySelector('#user-modal')
 const paginators = document.querySelector('.pagination')
 const genderContainer = document.querySelector('#gender-button-container')
-const dropDown = document.querySelector('.dropdown-menu')
+const dropDownGender = document.querySelector('#dropdown-menu-gender')
 
 let users = []
 let filteredUsers = []
@@ -63,7 +63,7 @@ genderContainer.addEventListener('click', function onGenderButtonClicked(event) 
 })
 
 // Change the gender from navbar
-dropDown.addEventListener('click', function onGenderButtonClicked(event) {
+dropDownGender.addEventListener('click', function onGenderButtonClicked(event) {
   const target = event.target
   if (target.classList.contains('male')) {
     changeGender('male')
