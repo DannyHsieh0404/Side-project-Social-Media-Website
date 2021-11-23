@@ -114,7 +114,7 @@ function loadUserData(users) {
   users.forEach(function (user) {
     rawHTML += `
     <div class="col-3">
-		<div class="card m-4" style="width: 17rem;">
+		<div class="card m-4" id="user-card" style="width: 17rem;">
 		<button type="button" class="btn btn-light show-user-info" data-bs-toggle="modal" data-bs-target="#user-modal" data-sha1="${user.login.sha1}">
     <img src=${user.picture.large} alt="" data-sha1="${user.login.sha1}">
 		</button>

@@ -139,6 +139,11 @@ html {
   padding: 0 0 20px 0;
   /* border: 5px solid red; */
 }
+#user-card:hover {
+  transform: scale(1.05);
+  transition: 500ms;
+  border: 3px solid #ffc966;
+}
 
 /* Footer */
 #footer {
