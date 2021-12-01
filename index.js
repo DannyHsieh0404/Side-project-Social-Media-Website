@@ -12,6 +12,7 @@ const dropDownGender = document.querySelector('#dropdown-menu-gender')
 
 let users = []
 let filteredUsers = []
+let filteredUsersGendered = []
 let closeFirends = []
 
 USERS_PER_PAGE = 16
@@ -21,18 +22,31 @@ NUM_OF_USERS = 120
 ////////////////////////////// Execution //////////////////////////////
 generateUsers();
 
-dataContainer.addEventListener('click', function onCardClicked(event) {
+dataContainer.addEventListener('click', function onUserClicked(event) {
   const target = event.target
-  showUserModal(event.target.dataset.sha1)
+  if (target.classList.contains("show-user-info") || target.tagName === "IMG") {
+    showUserModal(target.dataset.sha1)
+  }
 })
 
 // Searching users with keywords
 searchForm.addEventListener('click', function onFormSubmitted(event) {
-  event.preventDefault() // avoid the page being re-loaded
-  findUsers(event) // find the specific users (filtered users)
-  loadUserData(getUsersByPage(1)) // re-render the panel (page 1 by default)
-  renderPaginators(filteredUsers.length) // re-render the paginators
+  const target = event.target
+
+  if (target.classList.contains("search-btn")) {
+    event.preventDefault() // avoid the page being re-loaded
+    findUsers() // find the specific users (filtered users)
+    loadUserData(getUsersByPage(1)) // re-render the panel
+
+    // re-render the pagination based on situation
+    if (filteredUsers.length) {
+      renderPaginators(filteredUsers.length)
+    } else {
+      renderPaginators(users.length)
+    }
+  }
 })
+
 
 // Add to close friends
 modal.addEventListener('click', function onButtonClicked(event) {
@@ -62,6 +76,7 @@ genderContainer.addEventListener('click', function onGenderButtonClicked(event) 
   }
 })
 
+
 // Change the gender from navbar
 dropDownGender.addEventListener('click', function onGenderButtonClicked(event) {
   const target = event.target
@@ -77,33 +92,63 @@ dropDownGender.addEventListener('click', function onGenderButtonClicked(event) {
 
 ////////////////////////////// Functions //////////////////////////////
 function generateUsers() {
-  // get the data of users
-  axios
-    .get(BASE_URL + `?results=${NUM_OF_USERS}`)
-    .then(function (response) {
-      // 1. Store the data
-      users = []
-      users.push(...response.data.results)
+  if (!filteredUsers.length && !filteredUsersGendered.length) {
+    // get the data of users
+    axios
+      .get(BASE_URL + `?results=${NUM_OF_USERS}`)
+      .then(function (response) {
+        // 1. Store the data
+        users = []
+        users.push(...response.data.results)
 
-      // 2. Render the panel
-      loadUserData(getUsersByPage(1))
-      renderPaginators(users.length)
-    })
-    .catch((error) => console.log(error));
+        // 2. Render the panel
+        loadUserData(getUsersByPage(1))
+        renderPaginators(users.length)
+      })
+      .catch((error) => console.log(error));
+  } else if (filteredUsers.length && !filteredUsersGendered.length) { // double guarantees
+    // load all the filtered users with all kinds of genders
+    loadUserData(getUsersByPage(1)) // will load all the filtered users
+    renderPaginators(filteredUsers.length)
+  }
 }
 
 //////////////////////////////
 function changeGender(gender) {
-  axios
-    .get(BASE_URL + `?gender=${gender}&results=${NUM_OF_USERS}`)
-    .then(function (response) {
-      users = []
-      users.push(...response.data.results)
+  if (!filteredUsers.length && !filteredUsersGendered.length) { // double guarantees (even if seems unnacessary)
+    // generate another set of users with specific gender
+    axios
+      .get(BASE_URL + `?gender=${gender}&results=${NUM_OF_USERS}`)
+      .then(function (response) {
+        users = []
+        users.push(...response.data.results)
 
-      loadUserData(getUsersByPage(1))
-      renderPaginators(users.length)
+        loadUserData(getUsersByPage(1)) // render the user panel
+        renderPaginators(users.length) // render the pagination
+      })
+      .catch((error) => console.log(error));
+  } else {
+    // only shows the filtered users with specific gender
+
+    filteredUsers.forEach(function (user) {
+      if (user.gender === gender) {
+        filteredUsersGendered.push(user) // if meets the specific gender, then store it in a temporary array
+      }
     })
-    .catch((error) => console.log(error));
+
+    // check if there is any user with specific gender
+    if (!filteredUsersGendered.length) {
+      loadUserData(getUsersByPage(1)) // render the user panel
+      renderPaginators(filteredUsers.length) // render the pagination
+      alert("無此性別之相關用戶!")
+    } else {
+      loadUserData(getUsersByPage(1)) // render the user panel (filteredUsersGendered)
+      renderPaginators(filteredUsersGendered.length) // render the pagination (filteredUsersGendered)
+    }
+
+    // remove the gendered users to avoid potential rendering contents problems (May wrongfully load the gendered users when selecting non-specific gender if there are still users in the filteredUsersGendered list)
+    filteredUsersGendered = []
+  }
 }
 
 //////////////////////////////
@@ -147,21 +192,29 @@ function showUserModal(sha1) {
 
 ////////////////////////////////////////////////////////////
 
-function findUsers(event) {
+function findUsers() {
   // 1. Get the keywords
   const keyword = searchInput.value.toLowerCase().trim()
 
   // 2. Filter the users list
-  filteredUsers = users.filter(function (user) {
-    return user.name.toLowerCase().includes(keyword) || user.surname.toLowerCase().includes(keyword)
+  const Userlist = users.filter(function (user) {
+    return user.name.first.toLowerCase().includes(keyword) || user.name.last.toLowerCase().includes(keyword)
   })
 
   // 3. Check the exceptions (when the button is clicked)
-  if (!filteredUsers.length && event.target.tagName === "BUTTON") {
-    return alert('請輸入有效關鍵字!')
+  if (!Userlist.length) {
+    alert('請輸入有效關鍵字!')
   }
 
+  // 4. Determine what's the contents for filteredUsers
+  filteredUsers = Userlist.length ? Userlist : []
+
+  // 5. Clean up the search input
+  searchInput.value = ""
   // Since the "filtered" user list is modified, we do NOT need to return anything!
+
+
+  // FIXME: Potential problem: sometimes after filtering users (with results), and then click search btn without entering input will generate users of specific gender and not able to change to another gender (generate users with another gender).
 }
 
 ////////////////////////////////////////////////////////////
@@ -204,7 +257,15 @@ function renderPaginators(numOfUsers) {
 // Return the data of a specific page
 function getUsersByPage(page) {
   // 1. Determine which user list to split
-  let list = filteredUsers.length ? filteredUsers : users
+  let list = []
+
+  if (!filteredUsers.length) {
+    list = users
+  } else if (filteredUsers.length && !filteredUsersGendered.length) {
+    list = filteredUsers
+  } else if (filteredUsers.length && filteredUsersGendered.length) {
+    list = filteredUsersGendered
+  }
 
   // 2. Find where to start
   let startIndex = (page - 1) * USERS_PER_PAGE

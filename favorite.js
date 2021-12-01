@@ -25,7 +25,7 @@ searchForm.addEventListener('click', function onFormSubmitted(event) {
 
   if (target.classList.contains("search-btn")) {
     event.preventDefault() // avoid the page being re-loaded
-    findUsers(users, event) // find the specific users (filtered users)
+    findUsers() // find the specific users (filtered users)
     loadUserData(filteredUsers) // re-render the panel
   }
 })
@@ -91,20 +91,25 @@ function showUserModal(sha1) {
 
 ////////////////////////////////////////////////////////////
 
-function findUsers(users, event) {
+function findUsers() {
   // 1. Get the keywords
   const keyword = searchInput.value.toLowerCase().trim()
 
   // 2. Filter the users list
-  filteredUsers = users.filter(function (user) {
-    return user.name.toLowerCase().includes(keyword) || user.surname.toLowerCase().includes(keyword)
+  const Userlist = users.filter(function (user) {
+    return user.name.first.toLowerCase().includes(keyword) || user.name.last.toLowerCase().includes(keyword)
   })
 
   // 3. Check the exceptions (when the button is clicked)
-  if (!filteredUsers.length && event.target.tagName === "BUTTON") {
-    return alert('請輸入有效關鍵字!')
+  if (!Userlist.length) {
+    alert('請輸入有效關鍵字!')
   }
 
+  // 4. Determine what's the contents for filteredUsers
+  filteredUsers = Userlist.length ? Userlist : users
+
+  // 5. Clean up the search input
+  searchInput.value = ""
   // Since the "filtered" user list is modified, we do NOT need to return anything!
 }
 
