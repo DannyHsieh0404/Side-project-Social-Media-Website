@@ -23,7 +23,7 @@ dataContainer.addEventListener('click', function onUserClicked(event) {
 searchForm.addEventListener('click', function onFormSubmitted(event) {
   const target = event.target
 
-  if (target.classList.contains("search-button")) {
+  if (target.classList.contains("search-btn")) {
     event.preventDefault() // avoid the page being re-loaded
     findUsers(users, event) // find the specific users (filtered users)
     loadUserData(filteredUsers) // re-render the panel
