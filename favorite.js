@@ -14,7 +14,9 @@ generateUsers();
 
 dataContainer.addEventListener('click', function onUserClicked(event) {
   const target = event.target
-  showUserModal(event.target.dataset.sha1)
+  if (target.classList.contains("show-user-info") || target.tagName === "IMG") {
+    showUserModal(target.dataset.sha1)
+  }
 })
 
 // Searching users with keywords

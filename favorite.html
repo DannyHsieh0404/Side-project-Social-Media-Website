@@ -71,19 +71,20 @@
     </div>
   </nav>
 
+
+  <!-- Search form area -->
+  <form class="row g-3" id="search-form">
+    <div class="col-auto">
+      <label class="sr-only visually-hidden" for="inlineFormInputName2">Keyword</label>
+      <input type="text" class="form-control" id="search-input" placeholder="Keyword...">
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary mb-3 search-btn">Find friends</button>
+    </div>
+  </form>
+
   <!-- Main contents -->
   <div class="container" id="data-container">
-    <!-- Search Form -->
-    <form class="row g-3" id="search-form">
-      <div class="col-auto">
-        <label class="sr-only visually-hidden" for="inlineFormInputName2">Keyword</label>
-        <input type="text" class="form-control" id="search-input" placeholder="Keyword...">
-      </div>
-      <div class="col-auto">
-        <button type="submit" class="btn btn-primary mb-3 search-btn">Find friends</button>
-      </div>
-    </form>
-
     <!-- 	Friends area -->
     <div class="row" id="user-panel"></div>
   </div>
