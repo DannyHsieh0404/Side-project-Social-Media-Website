@@ -21,9 +21,13 @@ dataContainer.addEventListener('click', function onUserClicked(event) {
 
 // Searching users with keywords
 searchForm.addEventListener('click', function onFormSubmitted(event) {
-  event.preventDefault() // avoid the page being re-loaded
-  findUsers(users, event) // find the specific users (filtered users)
-  loadUserData(filteredUsers) // re-render the panel
+  const target = event.target
+
+  if (target.classList.contains("search-button")) {
+    event.preventDefault() // avoid the page being re-loaded
+    findUsers(users, event) // find the specific users (filtered users)
+    loadUserData(filteredUsers) // re-render the panel
+  }
 })
 
 // Remove close friends
