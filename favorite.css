@@ -15,6 +15,30 @@ html {
   font-family:'Arial Narrow', Arial, sans-serif;
   letter-spacing: 1px;
 }
+#navbar-info {
+  display: flex;
+}
+#navbar-user {
+  display: flex;
+  justify-content: space-between;
+  width: 21vw;
+}
+#navbar-user-icon {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 5vw;
+}
+#navbar-user-icon a:link {
+  text-decoration: none;
+}
+#navbar-user-icon a:hover {
+  transform: scale(1.08);
+  transition: 400ms;
+}
+#dropdown-menu-my-space i {
+  margin-right: 10px;
+}
 
 /* User panel */
 #data-container {
@@ -34,7 +58,7 @@ html {
 }
 #footer-contents {
   font-size: 25px;
-  font-weight: 300;
+  font-weight: 400;
 }
 #footer-logo {
   display: flex;
@@ -44,4 +68,13 @@ html {
   font-size: 27px;
   font-family:'Arial Narrow', Arial, sans-serif;
   letter-spacing: 1px;
+}
+.footer-contents-list {
+  padding-top: 7px;
+  font-size: 17px;
+  font-weight: 300;
+}
+.footer-contents-list ul{
+  list-style-type: none;
+  padding: 0; /* remove indentation */
 }
