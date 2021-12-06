@@ -2,8 +2,7 @@
 // 1. Find in which condition the FIXME problem occurs.
 // 2. Edit contents in the feature part. (Done)
 // 3. Change contents layout in Modals. (Done)
-// 4. Add ... to paginators
-// 5. Write comments 寫註解
+// 4. Add ... to paginators (Optional)
 
 const BASE_URL = "https://randomuser.me/api/"
 const introduction = document.querySelector('#introduction')
@@ -23,8 +22,10 @@ let filteredUsersGendered = []
 let closeFirends = []
 
 USERS_PER_PAGE = 16
-NUM_OF_USERS = 120
+PAG_PER_PAGE = 5
+NUM_OF_USERS = 800
 
+let currentPage = 1
 
 ////////////////////////////// Execution //////////////////////////////
 generateUsers();
@@ -47,9 +48,9 @@ searchForm.addEventListener('click', function onFormSubmitted(event) {
 
     // re-render the pagination based on situation
     if (filteredUsers.length) {
-      renderPaginators(filteredUsers.length)
+      renderPaginators(1)
     } else {
-      renderPaginators(users.length)
+      renderPaginators(1)
     }
   }
 })
@@ -64,15 +65,27 @@ modal.addEventListener('click', function onButtonClicked(event) {
   }
 })
 
+
+// Credit: 曉諭同學的 pagination 寫法修改
 // Change the pages (when clicking paginations)
 paginators.addEventListener('click', function onPaginatorClicked(event) {
+  event.preventDefault()
+  const target = event.target
   page = Number(event.target.dataset.page)
-  loadUserData(getUsersByPage(page))
+
+  if (target.classList.contains("previous")) {
+    renderPaginators(page - 1)
+  } else if (target.classList.contains("next")) {
+    renderPaginators(page + 1)
+  } else {
+    loadUserData(getUsersByPage(page))
+  }
 })
 
 
 // Change the gender
 genderContainer.addEventListener('click', function onGenderButtonClicked(event) {
+  event.preventDefault()
   const target = event.target
   if (target.id === 'gender-button-male') {
     changeGender('male')
@@ -86,6 +99,7 @@ genderContainer.addEventListener('click', function onGenderButtonClicked(event) 
 
 // Change the gender from navbar
 dropDownGender.addEventListener('click', function onGenderButtonClicked(event) {
+  event.preventDefault()
   const target = event.target
   if (target.classList.contains('male')) {
     changeGender('male')
@@ -110,13 +124,13 @@ function generateUsers() {
 
         // 2. Render the panel
         loadUserData(getUsersByPage(1))
-        renderPaginators(users.length)
+        renderPaginators(1)
       })
       .catch((error) => console.log(error));
   } else if (filteredUsers.length && !filteredUsersGendered.length) { // double guarantees
     // load all the filtered users with all kinds of genders
     loadUserData(getUsersByPage(1)) // will load all the filtered users
-    renderPaginators(filteredUsers.length)
+    renderPaginators(1)
   }
 }
 
@@ -131,7 +145,7 @@ function changeGender(gender) {
         users.push(...response.data.results)
 
         loadUserData(getUsersByPage(1)) // render the user panel
-        renderPaginators(users.length) // render the pagination
+        renderPaginators(1) // render the pagination
       })
       .catch((error) => console.log(error));
   } else {
@@ -146,11 +160,11 @@ function changeGender(gender) {
     // check if there is any user with specific gender
     if (!filteredUsersGendered.length) {
       loadUserData(getUsersByPage(1)) // render the user panel
-      renderPaginators(filteredUsers.length) // render the pagination
+      renderPaginators(1) // render the pagination
       alert("無此性別之相關用戶!")
     } else {
       loadUserData(getUsersByPage(1)) // render the user panel (filteredUsersGendered)
-      renderPaginators(filteredUsersGendered.length) // render the pagination (filteredUsersGendered)
+      renderPaginators(1) // render the pagination (filteredUsersGendered)
     }
 
     // remove the gendered users to avoid potential rendering contents problems (May wrongfully load the gendered users when selecting non-specific gender if there are still users in the filteredUsersGendered list)
@@ -248,17 +262,54 @@ function addToClose(sha1) {
   localStorage.setItem('closeFriends', JSON.stringify(closeFirends))
 }
 
+
 ////////////////////////////////////////////////////////////
 
-function renderPaginators(numOfUsers) {
-  // 1. Find the # of pages
-  const numOfPages = Math.ceil(numOfUsers / USERS_PER_PAGE)
 
-  // 2. Generate the paginators
-  let rawHTML = ''
-  for (let page = 1; page <= numOfPages; page++) {
-    rawHTML += `<li class="page-item"><a class="page-link" href="#" data-page = ${page}>${page}</a></li>`
+function renderPaginators(pageNum) {
+  // Find the length of the list
+  let listLength = 0
+  if (!filteredUsers.length) {
+    listLength = users.length
+  } else {
+    if (filteredUsersGendered.length) { listLength = filteredUsersGendered.length }
+    else { listLength = filteredUsers.length }
   }
+
+  // Find the total number of pages & right number pages of paginators
+  totalPages = Math.ceil(listLength / USERS_PER_PAGE)
+  totalPagesOfPag = Math.ceil(totalPages / PAG_PER_PAGE)
+
+  // Deal with exceptions
+  if (pageNum < 1 || pageNum > totalPagesOfPag) { return }
+
+  // Determine the current page (=== page inputted)
+  currentPage = pageNum
+
+  // Determine which page to start from
+  const startPage = (pageNum - 1) * PAG_PER_PAGE + 1
+
+  let rawHTML = `<li class="page-item">
+       <a class="page-link previous" href="#" aria-label="Previous" data-page=${pageNum}>
+         <span aria-hidden="true" class = "previous" data-page=${pageNum}>&laquo;</span>
+       </a>
+     </li>`
+
+  // Number of pages of paginators doesn't meet "a page" of pages of paginators
+  if (pageNum === totalPages && totalPages % PAG_PER_PAGE !== 0) {
+    for (let page = startPage; page < startPage + totalPages % PAG_PER_PAGE; page++) {
+      rawHTML += `<li class="page-item"><a class="page-link" href="#" data-page = ${page}>${page}</a></li>`
+    }
+  } else {
+    for (let page = startPage; page < startPage + PAG_PER_PAGE; page++) {
+      rawHTML += `<li class="page-item"><a class="page-link" href="#" data-page = ${page}>${page}</a></li>`
+    }
+  }
+  rawHTML += `<li class="page-item">
+       <a class="page-link next" href="#" aria-label="Next" data-page=${pageNum}>
+        <span aria-hidden="true" class = "next" data-page=${pageNum}>&raquo;</span>
+       </a>
+     </li>`
   paginators.innerHTML = rawHTML
 }
 
