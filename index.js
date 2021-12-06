@@ -45,13 +45,7 @@ searchForm.addEventListener('click', function onFormSubmitted(event) {
     event.preventDefault() // avoid the page being re-loaded
     findUsers() // find the specific users (filtered users)
     loadUserData(getUsersByPage(1)) // re-render the panel
-
-    // re-render the pagination based on situation
-    if (filteredUsers.length) {
-      renderPaginators(1)
-    } else {
-      renderPaginators(1)
-    }
+    renderPaginators(1) // re-render the pagination
   }
 })
 
@@ -157,14 +151,12 @@ function changeGender(gender) {
       }
     })
 
+    loadUserData(getUsersByPage(1)) // render the user panel
+    renderPaginators(1) // render the pagination
+
     // check if there is any user with specific gender
     if (!filteredUsersGendered.length) {
-      loadUserData(getUsersByPage(1)) // render the user panel
-      renderPaginators(1) // render the pagination
       alert("無此性別之相關用戶!")
-    } else {
-      loadUserData(getUsersByPage(1)) // render the user panel (filteredUsersGendered)
-      renderPaginators(1) // render the pagination (filteredUsersGendered)
     }
 
     // remove the gendered users to avoid potential rendering contents problems (May wrongfully load the gendered users when selecting non-specific gender if there are still users in the filteredUsersGendered list)
