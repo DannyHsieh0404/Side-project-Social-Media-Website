@@ -1,7 +1,7 @@
 // TODO: 
 // 1. Find in which condition the FIXME problem occurs.
 // 2. Edit contents in the feature part. (Done)
-// 3. Change contents layout in Modals.
+// 3. Change contents layout in Modals. (Done)
 // 4. Add ... to paginators
 // 5. Write comments 寫註解
 
@@ -189,8 +189,14 @@ function showUserModal(sha1) {
   })
 
   modalTitle.innerText = `${data.name.first}  ${data.name.last}`
-  modalDescription.innerHTML = `Age: ${data.dob.age}</br>Gender: ${data.gender}</br>Birthday: ${data.dob.date}</br>Region: ${data.location.city}, ${data.location.countrys}</br>Email: ${data.email}`
-  modalImage.innerHTML = `<img src=${data.picture.large} alt="user-avatar" class="img-fluid" style="width: 75%">`
+  modalDescription.innerHTML = `<ul class="list-group list-group-flush">
+  <li class="list-group-item">Age: ${data.dob.age}</li>
+  <li class="list-group-item">Gender: ${data.gender}</li>
+  <li class="list-group-item">Birthday: ${data.dob.date}</li>
+  <li class="list-group-item">Region: ${data.location.city}, ${data.location.country}</li>
+  <li class="list-group-item">Email: ${data.email}</li>
+  </ul>`
+  modalImage.innerHTML = `<img src=${data.picture.large} alt="user-avatar" class="img-fluid rounded" style="width: 12rem;">`
   modalButton.dataset.sha1 = sha1
 }
 

@@ -202,3 +202,14 @@ html {
   list-style-type: none;
   padding: 0; /* remove indentation */
 }
+
+
+/* Modal part */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+}
+#user-modal-image {
+  display: flex;
+  justify-content: center;
+}
