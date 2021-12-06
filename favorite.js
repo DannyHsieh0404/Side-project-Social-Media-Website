@@ -1,3 +1,9 @@
+// TODO: 
+// 1. Add gender selecting feature (both users and filteredUsers).
+// 2. Add pagination (both users and filteredUsers).
+// 3. Change Search bar layout.
+// 4. Change contents layout in Modals.
+
 const BASE_URL = "https://randomuser.me/api/"
 const dataContainer = document.querySelector('#data-container')
 const userPanel = document.querySelector('#user-panel')

@@ -1,3 +1,10 @@
+// TODO: 
+// 1. Find in which condition the FIXME problem occurs.
+// 2. Edit contents in the feature part. (Done)
+// 3. Change contents layout in Modals.
+// 4. Add ... to paginators
+// 5. Write comments 寫註解
+
 const BASE_URL = "https://randomuser.me/api/"
 const introduction = document.querySelector('#introduction')
 const features = document.querySelector('#features')
@@ -156,10 +163,9 @@ function changeGender(gender) {
 function loadUserData(users) {
   let rawHTML = "";
 
-  users.forEach(function (user) {
-    rawHTML += `
-    <div class="col-3">
-		<div class="card m-4" id="user-card" style="width: 17rem;">
+  userPanel.innerHTML = users.map(user => (
+    `<div class="col">
+		<div class="card m-4" id="user-card" style="width: 15rem;">
 		<button type="button" class="btn btn-light show-user-info" data-bs-toggle="modal" data-bs-target="#user-modal" data-sha1="${user.login.sha1}">
     <img src=${user.picture.large} alt="" data-sha1="${user.login.sha1}">
 		</button>
@@ -167,9 +173,7 @@ function loadUserData(users) {
 			<h5>${user.name.first} ${user.name.last}</h5>
 		</div>
 	</div>
-  </div>`;
-  });
-  userPanel.innerHTML = rawHTML;
+  </div>`))
 }
 
 ////////////////////////////// This function is called when event is triggered
