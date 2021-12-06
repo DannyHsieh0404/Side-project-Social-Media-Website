@@ -40,6 +40,23 @@ html {
   margin-right: 10px;
 }
 
+/* Search form */
+#search-form-container {
+  padding: 30px;
+  border-radius: 15px;
+  background-color: white;
+}
+#search-form {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 10px;
+}
+#search-input {
+  width: 60vw;
+}
+
 /* User panel */
 #data-container {
   padding: 25px;
