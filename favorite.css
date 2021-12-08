@@ -57,6 +57,42 @@ html {
   width: 60vw;
 }
 
+/* Gender buttons */
+#gender-button-container {
+  bottom: 25px;
+  display: flex;
+  justify-content: center;
+  padding: 30px 0 10px 0;
+}
+.gender-button {
+  width: 300px;
+  height: 50px;
+  margin: 20px;
+  border: 2px solid #666666;
+  border-radius: 15px;
+  background-color: white;
+  font-size: 20px;
+  font-family: Arial, sans-serif;
+}
+#gender-button-icon {
+  margin-right: 10px;
+}
+#gender-button-male:hover {
+  transform: scale(1.1);
+  transition: 1s;
+  background-color: #7fbfff;
+}
+#gender-button-female:hover {
+  transform: scale(1.1);
+  transition: 1s;
+  background-color: #ffc0cb;
+}
+#gender-button-non-specified:hover {
+  transform: scale(1.1);
+  transition: 1s;
+  background-color: #ffc966;
+}
+
 /* User panel */
 #data-container {
   padding: 25px;

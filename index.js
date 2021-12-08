@@ -1,9 +1,3 @@
-// TODO: 
-// 1. Find in which condition the FIXME problem occurs.
-// 2. Edit contents in the feature part. (Done)
-// 3. Change contents layout in Modals. (Done)
-// 4. Add ... to paginators (Optional)
-
 const BASE_URL = "https://randomuser.me/api/"
 const introduction = document.querySelector('#introduction')
 const features = document.querySelector('#features')
@@ -28,7 +22,7 @@ NUM_OF_USERS = 800
 let currentPage = 1
 
 ////////////////////////////// Execution //////////////////////////////
-generateUsers();
+generateUsers()
 
 dataContainer.addEventListener('click', function onUserClicked(event) {
   const target = event.target
@@ -44,6 +38,10 @@ searchForm.addEventListener('click', function onFormSubmitted(event) {
   if (target.classList.contains("search-btn")) {
     event.preventDefault() // avoid the page being re-loaded
     findUsers() // find the specific users (filtered users)
+
+    // 避免載入 filteredUsersGenderded，而是要載入 filteredUsers
+    filteredUsersGendered = []
+
     loadUserData(getUsersByPage(1)) // re-render the panel
     renderPaginators(1) // re-render the pagination
   }
@@ -107,61 +105,46 @@ dropDownGender.addEventListener('click', function onGenderButtonClicked(event) {
 
 ////////////////////////////// Functions //////////////////////////////
 function generateUsers() {
-  if (!filteredUsers.length && !filteredUsersGendered.length) {
-    // get the data of users
+  if (!filteredUsers.length && !filteredUsersGendered.length) { // 沒有搜尋過關鍵字，選擇了未指定性別 (一開始時)
     axios
       .get(BASE_URL + `?results=${NUM_OF_USERS}`)
       .then(function (response) {
         // 1. Store the data
         users = []
         users.push(...response.data.results)
-
-        // 2. Render the panel
         loadUserData(getUsersByPage(1))
         renderPaginators(1)
       })
       .catch((error) => console.log(error));
-  } else if (filteredUsers.length && !filteredUsersGendered.length) { // double guarantees
-    // load all the filtered users with all kinds of genders
-    loadUserData(getUsersByPage(1)) // will load all the filtered users
+  } else {
+    // 避免 getUsersByPage 在 filteredUsersGendered 的情況下，誤 render 篩選過性別的結果
+    filteredUsersGendered = []
+
+    loadUserData(getUsersByPage(1))
     renderPaginators(1)
   }
 }
 
 //////////////////////////////
-function changeGender(gender) {
-  if (!filteredUsers.length && !filteredUsersGendered.length) { // double guarantees (even if seems unnacessary)
-    // generate another set of users with specific gender
-    axios
-      .get(BASE_URL + `?gender=${gender}&results=${NUM_OF_USERS}`)
-      .then(function (response) {
-        users = []
-        users.push(...response.data.results)
 
-        loadUserData(getUsersByPage(1)) // render the user panel
-        renderPaginators(1) // render the pagination
-      })
-      .catch((error) => console.log(error));
+function changeGender(gender) {
+  // Avoid potential rendering contents problems (May wrongfully load the gendered users when selecting non-specific gender if there are still users in the filteredUsersGendered list)
+  filteredUsersGendered = []
+
+  if (!filteredUsers.length && !filteredUsersGendered.length) { // double guarantees (even if seems unnacessary)
+    // find users with specific gender in the users list
+    filteredUsersGendered = users.filter(user => user.gender === gender)
   } else {
     // only shows the filtered users with specific gender
-
-    filteredUsers.forEach(function (user) {
-      if (user.gender === gender) {
-        filteredUsersGendered.push(user) // if meets the specific gender, then store it in a temporary array
-      }
-    })
-
-    loadUserData(getUsersByPage(1)) // render the user panel
-    renderPaginators(1) // render the pagination
-
-    // check if there is any user with specific gender
-    if (!filteredUsersGendered.length) {
-      alert("無此性別之相關用戶!")
-    }
-
-    // remove the gendered users to avoid potential rendering contents problems (May wrongfully load the gendered users when selecting non-specific gender if there are still users in the filteredUsersGendered list)
-    filteredUsersGendered = []
+    filteredUsersGendered = filteredUsers.filter(user => user.gender === gender)
   }
+  // check if there is any user with specific gender
+  if (!filteredUsersGendered.length) {
+    return alert("無此性別之相關用戶!")
+  }
+
+  loadUserData(getUsersByPage(1)) // render the user panel
+  renderPaginators(1) // render the pagination
 }
 
 //////////////////////////////
@@ -261,11 +244,12 @@ function addToClose(sha1) {
 function renderPaginators(pageNum) {
   // Find the length of the list
   let listLength = 0
-  if (!filteredUsers.length) {
+  if (!filteredUsers.length && !filteredUsersGendered.length) { // 沒有篩選過關鍵字與性別
     listLength = users.length
-  } else {
-    if (filteredUsersGendered.length) { listLength = filteredUsersGendered.length }
-    else { listLength = filteredUsers.length }
+  } else if (filteredUsers.length && !filteredUsersGendered.length) { // 有篩選過關鍵字，沒有選過性別
+    listLength = filteredUsers.length
+  } else { // 有選過性別
+    listLength = filteredUsersGendered.length
   }
 
   // Find the total number of pages & right number pages of paginators
@@ -312,11 +296,11 @@ function getUsersByPage(page) {
   // 1. Determine which user list to split
   let list = []
 
-  if (!filteredUsers.length) {
+  if (!filteredUsers.length && !filteredUsersGendered.length) {
     list = users
   } else if (filteredUsers.length && !filteredUsersGendered.length) {
     list = filteredUsers
-  } else if (filteredUsers.length && filteredUsersGendered.length) {
+  } else {
     list = filteredUsersGendered
   }
 
