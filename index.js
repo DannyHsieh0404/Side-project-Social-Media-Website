@@ -303,8 +303,8 @@ function renderPaginators(pageNum) {
      </li>`
 
   // Number of pages of paginators doesn't meet "a page" of pages of paginators
-  if (pageNum === totalPages && totalPages % PAG_PER_PAGE !== 0) {
-    for (let page = startPage; page < startPage + totalPages % PAG_PER_PAGE; page++) {
+  if (pageNum === totalPagesOfPag && totalPages % PAG_PER_PAGE !== 0) {
+    for (let page = startPage; page < startPage + (totalPages % PAG_PER_PAGE); page++) {
       rawHTML += `<li class="page-item"><a class="page-link" href="#" data-page = ${page}>${page}</a></li>`
     }
   } else {

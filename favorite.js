@@ -7,7 +7,7 @@ const genderContainer = document.querySelector('#gender-button-container')
 const paginators = document.querySelector('.pagination')
 const modal = document.querySelector('#user-modal')
 
-const users = [] // The closeFriends list
+let users = [] // The closeFriends list
 let filteredUsers = [] // For searching close friends with keywords
 let filteredUsersGendered = [] // For filtering by gender
 
@@ -109,6 +109,7 @@ function generateUsers() {
 
   if (!filteredUsers.length && !filteredUsersGendered.length) { // 仍未載入最愛使用者 (一開始時)
     const userList = JSON.parse(localStorage.getItem('closeFriends'))
+    users = []
     users.push(...userList)
   } else {
     // 避免 getUsersByPage 在 filteredUsersGendered 的情況下，誤 render 篩選過性別的結果
@@ -238,8 +239,8 @@ function renderPaginators(pageNum) {
      </li>`
 
   // Number of pages of paginators doesn't meet "a page" of pages of paginators
-  if (pageNum === totalPages && totalPages % PAG_PER_PAGE !== 0) {
-    for (let page = startPage; page < startPage + totalPages % PAG_PER_PAGE; page++) {
+  if (pageNum === totalPagesOfPag && totalPages % PAG_PER_PAGE !== 0) {
+    for (let page = startPage; page < startPage + (totalPages % PAG_PER_PAGE); page++) {
       rawHTML += `<li class="page-item"><a class="page-link" href="#" data-page = ${page}>${page}</a></li>`
     }
   } else if (totalPages < PAG_PER_PAGE) {
