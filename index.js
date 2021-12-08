@@ -33,13 +33,11 @@ dataContainer.addEventListener('click', function onUserClicked(event) {
     if (!target.classList.contains('added')) {
       // Not added yet
       addToClose(sha1)
-      target.classList.remove('fa')
-      target.classList.add('fa-lg', 'added')
+      target.classList.add('added')
     } else {
       // Added, need to remove
       removeCloseFriend(sha1)
-      target.classList.remove('fa-lg', 'added')
-      target.classList.add('fa')
+      target.classList.remove('added')
     }
   }
 })
@@ -172,7 +170,7 @@ function loadUserData(users) {
 		<div class="card-body">
 			<h5>${user.name.first} ${user.name.last}</h5>
       <span>
-        <i class="far fa-heart fa-lg" id="heart-add-to-close-friends" data-sha1="${user.login.sha1}"></i>
+        <i class="far fa-heart fa" id="heart-add-to-close-friends" data-sha1="${user.login.sha1}"></i>
       </span>
 		</div>
 	</div>
