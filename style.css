@@ -16,8 +16,7 @@ html {
   height: 40px;
   margin: 10px;
   font-size: 20px;
-  font-family: 'Arial Narrow', Arial, sans-serif;
-  letter-spacing: 1px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 #navbar-info {
   display: flex;
@@ -207,8 +206,7 @@ html {
   justify-content: center;
   align-items: center;
   font-size: 27px;
-  font-family:'Arial Narrow', Arial, sans-serif;
-  letter-spacing: 1px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 .footer-contents-list {
   padding-top: 7px;
