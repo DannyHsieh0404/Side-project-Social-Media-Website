@@ -28,6 +28,19 @@ dataContainer.addEventListener('click', function onUserClicked(event) {
   const target = event.target
   if (target.classList.contains("show-user-info") || target.tagName === "IMG") {
     showUserModal(target.dataset.sha1)
+  } else if (target.matches('#heart-add-to-close-friends')) {
+    const sha1 = target.dataset.sha1
+    if (!target.classList.contains('added')) {
+      // Not added yet
+      addToClose(sha1)
+      target.classList.remove('fa')
+      target.classList.add('fa-lg', 'added')
+    } else {
+      // Added, need to remove
+      removeCloseFriend(sha1)
+      target.classList.remove('fa-lg', 'added')
+      target.classList.add('fa')
+    }
   }
 })
 
@@ -150,8 +163,6 @@ function changeGender(gender) {
 //////////////////////////////
 
 function loadUserData(users) {
-  let rawHTML = "";
-
   userPanel.innerHTML = users.map(user => (
     `<div class="col">
 		<div class="card m-4" id="user-card" style="width: 15rem;">
@@ -160,9 +171,12 @@ function loadUserData(users) {
 		</button>
 		<div class="card-body">
 			<h5>${user.name.first} ${user.name.last}</h5>
+      <span>
+        <i class="far fa-heart fa-lg" id="heart-add-to-close-friends" data-sha1="${user.login.sha1}"></i>
+      </span>
 		</div>
 	</div>
-  </div>`))
+  </div>`)).join('')
 }
 
 ////////////////////////////// This function is called when event is triggered
@@ -185,7 +199,7 @@ function showUserModal(sha1) {
   <li class="list-group-item">Region: ${data.location.city}, ${data.location.country}</li>
   <li class="list-group-item">Email: ${data.email}</li>
   </ul>`
-  modalImage.innerHTML = `<img src=${data.picture.large} alt="user-avatar" class="img-fluid rounded" style="width: 12rem;">`
+  modalImage.innerHTML = `<img src=${data.picture.large} alt="user-avatar" class="img-fluid" id="modal-avatar">`
   modalButton.dataset.sha1 = sha1
 }
 
@@ -237,9 +251,26 @@ function addToClose(sha1) {
   localStorage.setItem('closeFriends', JSON.stringify(closeFirends))
 }
 
-
 ////////////////////////////////////////////////////////////
 
+function removeCloseFriend(sha1) {
+  // 0. Get the favorite friend list
+  closeFirends = JSON.parse(localStorage.getItem('closeFriends')) || []
+
+  // 1. Get the closeFriends list (if any)
+  if (!closeFirends.length || !closeFirends) { return alert('您已無 close friends...') }
+
+  // 2. Find the corresponding user ID
+  const removedIndex = closeFirends.findIndex(user => user.login.sha1 === sha1)
+
+  // 3. Remove the user
+  closeFirends.splice(removedIndex, 1)
+
+  // 4. Update and store the list to local storage
+  localStorage.setItem('closeFriends', JSON.stringify(closeFirends))
+}
+
+////////////////////////////////////////////////////////////
 
 function renderPaginators(pageNum) {
   // Find the length of the list

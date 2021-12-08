@@ -168,9 +168,27 @@ html {
   /* border: 5px solid red; */
 }
 #user-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.025);
   transition: 500ms;
   border: 3px solid #ffc966;
+}
+#heart-add-to-close-friends {
+  margin-top: 5px;
+}
+#heart-add-to-close-friends:hover {
+  transform: scale(1.1);
+  transition: 500ms;;
+}
+.added {
+  color: red;
+  animation-name: addedAnimation;
+  animation-duration: 1.7s;
+  animation-iteration-count: 1;
+}
+@keyframes addedAnimation {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Footer */
@@ -212,4 +230,20 @@ html {
 #user-modal-image {
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  background-image: url('https://i.ibb.co/prqh9SW/714-7147125-floral-frame-simple-flower-frame-png-transparent-png-removebg-preview.png');
+  background-size: 465px 200px;
+}
+#modal-avatar {
+  height: 10rem;
+  width: 10rem;
+  border: 2.5px solid #888;
+  border-radius: 50%;
+  box-shadow: 4px 4px 7px 1px rgba(0, 0, 0, 0.2);
+}
+#modal-avatar:hover {
+  transform: scale(1.1);
+  transition: 500ms;
+  border: 4px solid #ffc966;
 }
